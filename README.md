@@ -1,75 +1,85 @@
-# 🌌 ShopSphere — Premium Fullstack E-Commerce Platform
+# 🌌 ShopSphere — Next-Gen Fullstack E-Commerce Experience
 
-Welcome to **ShopSphere**, a state-of-the-art e-commerce application featuring a fast asynchronous **FastAPI** backend, secure **PostgreSQL** database, and a stunning **Vite + React** dark-mode/glassmorphic frontend.
+<div align="center">
+  
+  [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
+  [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
+  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org)
+  [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+  [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
+  
+  <p align="center">
+    A futuristic e-commerce platform built with <b>FastAPI</b>, <b>SQLAlchemy</b>, and a stunning <b>Glassmorphism React SPA</b>.
+  </p>
+</div>
 
 ---
 
-## 🎨 Design & Aesthetic Overview
-ShopSphere features a premium **Glassmorphism** styling system built on custom dark-mode variables:
-* **Deep Space Gradients**: A dark radial background with neon accents (`#8b5cf6` violet, `#06b6d4` cyan, and `#ec4899` pink).
-* **Frosted Glass Panels**: Cards and modals utilize `backdrop-filter: blur(16px)` and translucent borders for a unified, futuristic interface.
-* **Micro-Animations**: Smooth scale and color transitions on buttons, forms, and shopping cart drawers to maximize user delight.
+## ✨ Features at a Glance
+
+* 🔒 **Role-Based Portal Switching**: Dynamically shifts UI layouts depending on whether the authenticated user is a **Buyer** (Catalog, Cart, Checkout) or a **Seller** (Listing Management, Storefront Listings).
+* 🧪 **Resilient Offline Fallback**: The client monitors server status via live testing. If the backend server goes offline, it shifts into a fully simulated **Demo Mode** using mocked state.
+* 🛍️ **Glassmorphic Cart Drawer**: Real-time quantity edits, dynamic shipping costs, interactive promo code calculation (`SAVE10`, `SUPER20`), and order logging.
+* ⚡ **Ultra-Fast Database Operations**: Structured ORM mappings utilizing **Alembic migrations** and seeded mock profiles.
 
 ---
 
-## 🏗️ Technical Architecture & Data Flow
+## 🗺️ Visual Architecture Flow
 
 ```mermaid
-graph TB
-    subgraph Client [React SPA Frontend (Vite)]
-        UI[Glassmorphic UI Views]
-        State[React State Engine]
-        OfflineSim[Demo Mode Mock Data]
-    end
+graph TD
+    %% Node Definitions
+    Client["💻 Client (Vite + React SPA)"]
+    Router["⚡ FastAPI APIRouter"]
+    Security["🔑 Auth & Security (JWT / Bcrypt)"]
+    DB["🗄️ Database Session (SQLAlchemy)"]
+    Postgres[("🐘 PostgreSQL Engine")]
+    DemoMode["🎮 In-Memory Simulator (Demo Mode)"]
 
-    subgraph Service [FastAPI Service Layer]
-        API[FastAPI Endpoint Router]
-        Auth[JWT Guard / bcrypt Encryption]
-        Session[get_db Session Factory]
-    end
+    %% Styling classes
+    classDef clientStyle fill:#8b5cf6,stroke:#c084fc,stroke-width:2px,color:#fff;
+    classDef routerStyle fill:#06b6d4,stroke:#22d3ee,stroke-width:2px,color:#fff;
+    classDef securityStyle fill:#ec4899,stroke:#f472b6,stroke-width:2px,color:#fff;
+    classDef dbStyle fill:#10b981,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef pgStyle fill:#1e293b,stroke:#475569,stroke-width:2px,color:#fff;
+    classDef demoStyle fill:#f59e0b,stroke:#fbbf24,stroke-width:2px,color:#fff;
 
-    subgraph DataStore [Relational Storage]
-        Model[SQLAlchemy ORM Layer]
-        Postgres[(PostgreSQL Database)]
-    end
+    class Client clientStyle;
+    class Router routerStyle;
+    class Security securityStyle;
+    class DB dbStyle;
+    class Postgres pgStyle;
+    class DemoMode demoStyle;
 
-    %% Flow lines
-    UI -->|1. HTTP Headers & JWT Bearer Token| API
-    UI -->|2. Offline Auto-Fallback| OfflineSim
-    API -->|3. Validate Token & Passwords| Auth
-    API -->|4. Request Scoped Session| Session
-    Session -->|5. ORM Query / Mutation| Model
-    Model -->|6. Execute SQL Queries| Postgres
+    %% Connectors
+    Client -->|API Requests| Router
+    Client -.->|Offline Fallback| DemoMode
+    Router -->|Authenticate Request| Security
+    Router -->|Yield Session| DB
+    DB -->|Execute SQL| Postgres
 ```
 
-### Database Entity Relationship Model
+<details>
+<summary><b>📐 View Entity-Relationship Database Schema</b></summary>
 
 ```mermaid
 erDiagram
     USERS {
         int id PK
         string username UNIQUE
-        string password "Hashed"
+        string password
         string role "buyer | seller"
     }
     PRODUCTS {
         int id PK
         string name
-        float price
-        int stock
-        int seller_id FK
-    }
-    CARTS {
-        int id PK
-        int user_id FK
-        int product_id FK
-        int quantity
+{{ ... }}
     }
     ORDERS {
         int id PK
         int user_id FK
         float total
-        string status
+        string status "completed | pending"
     }
     PROMOS {
         int id PK
@@ -78,52 +88,54 @@ erDiagram
         boolean active
     }
 
-    USERS ||--o{ PRODUCTS : "registers (seller)"
+    USERS ||--o{ PRODUCTS : "registers"
     USERS ||--o{ CARTS : "manages"
     USERS ||--o{ ORDERS : "submits"
     PRODUCTS ||--o{ CARTS : "populates"
 ```
+</details>
 
 ---
 
-## 📂 Project Directory Structure
+## 🛠️ REST API Specification
 
-```
-└── ShopSphere/
-    ├── backend/
-    │   ├── alembic.ini             # Alembic database migration config
-    │   ├── pyproject.toml          # uv backend project & dependency setup
-    │   ├── main.py                 # FastAPI app entrypoint & middleware registry
-    │   ├── seed.py                 # Seeds initial products, promos, and users
-    │   ├── migrations/             # Database versions & schema scripts
-    │   └── app/
-    │       ├── core/               # Security utilities, JWT, and authentication guards
-    │       ├── database/           # Database creation & SQLAlchemy session setup
-    │       ├── models/             # SQLAlchemy ORM declarations (User, Product, Cart, etc.)
-    │       ├── routes/v1/          # REST Endpoints: Auth, Product, Cart, Orders, Promos
-    │       └── schemas/            # Pydantic schemas validating input/output payloads
-    └── frontend/
-        ├── package.json            # Node.js project manifest & scripts
-        ├── vite.config.js          # Vite compilation config
-        └── src/
-            ├── main.jsx            # Application entry render point
-            ├── App.jsx             # Combined dashboard logic, view state & API integration
-            └── index.css           # Custom Glassmorphism design tokens & styles
-```
+<details>
+<summary><b>🔌 Click to expand API Endpoint Map</b></summary>
+
+### Authentication Module
+* `POST /auth/register` - Create user profile (checks input rules).
+* `POST /auth/login` - Verify login credentials and issue Bearer JWT token.
+
+### Products Module
+* `GET /products/` - Get all products currently stored in the database.
+* `POST /products/` - Publish a new product listing (requires Seller role).
+* `PUT /products/{id}` - Modify price/stock info of an active listing.
+* `DELETE /products/{id}` - Remove a product listing from the storefront database.
+
+### Cart & Checkouts
+* `POST /cart/` - Insert a product or increment its quantity.
+* `GET /cart/` - View the user's cart contents.
+* `PUT /cart/{id}` - Adjust quantities of a cart item.
+* `POST /orders/` - Validate current cart, subtract inventory stocks, and create an order record.
+
+</details>
 
 ---
 
-## 💻 Code Highlights
+## ⌨️ Code Highlights
 
-### 1. Database Connection Configuration
-Setting up asynchronous and synchronous sessions inside [database.py](file:///d:/Ecommerce%20fullstack%20app/ShopSphere/backend/app/database/database.py):
+<details>
+<summary><b>🗄️ Core Database Session Management (database.py)</b></summary>
 
 ```python
+# app/database/database.py
 from decouple import config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
+# Load DATABASE_URL from .env
 DATABASE_URL = config("DATABASE_URL")
+
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -135,23 +147,24 @@ def get_db():
     finally:
         db.close()
 ```
+</details>
 
-### 2. Secure Token Signatures & Encryption
-Hashing password bytes and compiling JWT payloads in [security.py](file:///d:/Ecommerce%20fullstack%20app/ShopSphere/backend/app/core/security.py):
+<details>
+<summary><b>🔑 Safe Password Encodings & JWT Issuance (security.py)</b></summary>
 
 ```python
+# app/core/security.py
 import bcrypt
 from jose import jwt
 from datetime import datetime, timedelta
 from decouple import config
 
-SECRET_KEY = config("SECRET_KEY", default="fallback-secret-key")
+SECRET_KEY = config("SECRET_KEY", default="supersecret")
 ALGORITHM = config("ALGORITHM", default="HS256")
 
 def hash_password(password: str) -> str:
-    password_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
-    return bcrypt.hashpw(password_bytes, salt).decode('utf-8')
+    return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
@@ -162,84 +175,70 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 ```
+</details>
 
-### 3. Asynchronous React Demo Mode Fallback
-Automatically checking backend health and failing over gracefully inside [App.jsx](file:///d:/Ecommerce%20fullstack%20app/ShopSphere/frontend/src/App.jsx):
+<details>
+<summary><b>⚛️ Live Fallback Auto-Detection (App.jsx)</b></summary>
 
 ```javascript
+// src/App.jsx
 const testBackendConnection = async () => {
   try {
     const res = await fetch(`${API_BASE}/`);
     if (res.ok) {
       setIsDemoMode(false);
     } else {
-      throw new Error("Backend offline");
+      throw new Error("API Offline");
     }
   } catch (err) {
-    console.warn("Backend server offline. Falling back to Demo Mode.");
+    console.warn("Backend server not responding. Falling back to Demo Mode.");
     setIsDemoMode(true);
-    loadMockData(); // Injects mock products, promos, and dummy state
+    loadMockData(); // Populates active workspace with local listings
   }
 };
 ```
+</details>
 
 ---
 
-## 🔌 API Route Reference Table
+## 🚀 Interactive Quick Start
 
-| Module | HTTP Method | Endpoint Path | Payload / Parameter | Description |
-| :--- | :--- | :--- | :--- | :--- |
-| **Auth** | `POST` | `/auth/register` | `UserCreate` (JSON) | Creates a new buyer or seller account |
-| **Auth** | `POST` | `/auth/login` | `UserCreate` (JSON) | Verifies credentials, returns Bearer JWT |
-| **Products**| `GET` | `/products/` | None | Lists all active storefront listings |
-| **Products**| `POST` | `/products/` | `ProductCreate` (JSON)| Creates new listing (Seller credentials required) |
-| **Products**| `PUT` | `/products/{id}` | `ProductCreate` (JSON)| Updates pricing and stock of current listing |
-| **Products**| `DELETE` | `/products/{id}` | `id` (Path variable) | Removes listing from database |
-| **Cart** | `POST` | `/cart/` | `CartItem` (JSON) | Creates/adds target quantity to shopping cart |
-| **Cart** | `GET` | `/cart/` | None | Lists items currently stored in buyer's cart |
-| **Orders** | `POST` | `/orders/` | `OrderCreate` (JSON) | Completes checkout and subtracts stock items |
-| **Promos** | `GET` | `/promos/` | None | Lists active marketing discounts |
-
----
-
-## 🚀 Step-by-Step Execution Guide
-
-### 1. Database Creation
-Ensure your PostgreSQL instance is running. Connect via the command line or `pgAdmin` and execute:
+### 📂 Setup Database
+Open your PostgreSQL management tool and query:
 ```sql
 CREATE DATABASE shopsphere;
 ```
 
-### 2. Backend Installation & Run
-Open a terminal panel and run:
+### 💻 Run Backend
+In a new terminal window:
 ```bash
-# Navigate to backend directory
-cd "d:\Ecommerce fullstack app\ShopSphere\backend"
+# Enter backend folder
+cd ShopSphere/backend
 
-# Install all packages from pyproject.toml via uv
+# Add necessary packaging variables
 uv add fastapi uvicorn sqlalchemy psycopg2-binary asyncpg pydantic python-decouple alembic bcrypt python-jose[cryptography] passlib
 
-# Apply Alembic schema migrations
+# Execute database schema update
 uv run alembic upgrade head
 
 # Seed initial store credentials, items, and promos
 uv run python seed.py
 
-# Launch development API server
+# Launch live API server
 uv run uvicorn main:app --reload
 ```
 
-### 3. Frontend Installation & Run
-Open a separate terminal panel and run:
+### 🎨 Run Frontend
+In a separate terminal window:
 ```bash
-# Navigate to frontend directory
-cd "d:\Ecommerce fullstack app\ShopSphere\frontend"
+# Enter frontend folder
+cd ShopSphere/frontend
 
-# Install node dependencies
+# Install package dependencies
 npm install
 
-# Start local React development server
+# Start Vite live reload development server
 npm run dev
 ```
 
-Visit the application locally at `http://localhost:5173/` and API documentation at `http://127.0.0.1:8000/docs`.
+🌐 Open [http://localhost:5173](http://localhost:5173) to view the client dashboard. Check the interactive API sandbox at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
