@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <!-- Definitions for Markers and Filters -->
+  <defs>
+    <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4">
+      <circle cx="5" cy="5" r="5" fill="#a78bfa"/>
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="1" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0d0e15" rx="15"/>
+
+  <!-- Relationship Lines -->
+  <!-- Users to Products (registers) -->
+  <path d="M 230,110 L 300,110" fill="none" stroke="#60a5fa" stroke-width="2" marker-start="url(#dot)" marker-end="url(#dot)"/>
+  <text x="245" y="100" fill="#60a5fa" font-family="Segoe UI, sans-serif" font-size="10" font-weight="600">registers</text>
+
+  <!-- Users to Carts (manages) -->
+  <path d="M 180,180 L 180,220 L 300,220" fill="none" stroke="#f472b6" stroke-width="2" marker-start="url(#dot)" marker-end="url(#dot)"/>
+  <text x="200" y="210" fill="#f472b6" font-family="Segoe UI, sans-serif" font-size="10" font-weight="600">manages</text>
+
+  <!-- Users to Orders (submits) -->
+  <path d="M 115,180 L 115,280" fill="none" stroke="#34d399" stroke-width="2" marker-start="url(#dot)" marker-end="url(#dot)"/>
+  <text x="125" y="235" fill="#34d399" font-family="Segoe UI, sans-serif" font-size="10" font-weight="600">submits</text>
+
+  <!-- Products to Carts (populates) -->
+  <path d="M 400,200 L 400,280" fill="none" stroke="#a78bfa" stroke-width="2" marker-start="url(#dot)" marker-end="url(#dot)"/>
+  <text x="410" y="245" fill="#a78bfa" font-family="Segoe UI, sans-serif" font-size="10" font-weight="600">populates</text>
+
+
+  <!-- Entities (Tables) -->
+
+  <!-- 1. USERS Table -->
+  <g filter="url(#shadow)" transform="translate(30, 40)">
+    <rect width="200" height="140" rx="8" fill="#1e293b" stroke="#38b2ac" stroke-width="1.5"/>
+    <rect width="200" height="35" rx="8" fill="#0f172a" />
+    <path d="M 0,35 L 200,35" stroke="#38b2ac" stroke-width="1.5"/>
+    <text x="10" y="22" fill="#38b2ac" font-family="Segoe UI, sans-serif" font-size="12" font-weight="bold">👤 USERS</text>
+    
+    <text x="15" y="55" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11" font-weight="bold">id</text>
+    <text x="75" y="55" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [PK]</text>
+
+    <text x="15" y="75" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">username</text>
+    <text x="75" y="75" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">VARCHAR [UQ]</text>
+
+    <text x="15" y="95" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">password</text>
+    <text x="75" y="95" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">VARCHAR</text>
+
+    <text x="15" y="115" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">role</text>
+    <text x="75" y="115" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">VARCHAR</text>
+  </g>
+
+  <!-- 2. PRODUCTS Table -->
+  <g filter="url(#shadow)" transform="translate(300, 40)">
+    <rect width="200" height="160" rx="8" fill="#1e293b" stroke="#8b5cf6" stroke-width="1.5"/>
+    <rect width="200" height="35" rx="8" fill="#0f172a" />
+    <path d="M 0,35 L 200,35" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="10" y="22" fill="#c084fc" font-family="Segoe UI, sans-serif" font-size="12" font-weight="bold">📦 PRODUCTS</text>
+
+    <text x="15" y="55" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11" font-weight="bold">id</text>
+    <text x="80" y="55" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [PK]</text>
+
+    <text x="15" y="75" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">name</text>
+    <text x="80" y="75" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">VARCHAR</text>
+
+    <text x="15" y="95" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">price</text>
+    <text x="80" y="95" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">FLOAT</text>
+
+    <text x="15" y="115" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">stock</text>
+    <text x="80" y="115" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT</text>
+
+    <text x="15" y="135" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">seller_id</text>
+    <text x="80" y="135" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [FK]</text>
+  </g>
+
+  <!-- 3. PROMOS Table -->
+  <g filter="url(#shadow)" transform="translate(570, 40)">
+    <rect width="200" height="140" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect width="200" height="35" rx="8" fill="#0f172a" />
+    <path d="M 0,35 L 200,35" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="10" y="22" fill="#fbbf24" font-family="Segoe UI, sans-serif" font-size="12" font-weight="bold">🏷️ PROMOS</text>
+
+    <text x="15" y="55" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11" font-weight="bold">id</text>
+    <text x="80" y="55" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [PK]</text>
+
+    <text x="15" y="75" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">code</text>
+    <text x="80" y="75" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">VARCHAR [UQ]</text>
+
+    <text x="15" y="95" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">discount</text>
+    <text x="80" y="95" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">FLOAT</text>
+
+    <text x="15" y="115" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">active</text>
+    <text x="80" y="115" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">BOOLEAN</text>
+  </g>
+
+  <!-- 4. CARTS Table -->
+  <g filter="url(#shadow)" transform="translate(300, 280)">
+    <rect width="200" height="140" rx="8" fill="#1e293b" stroke="#ec4899" stroke-width="1.5"/>
+    <rect width="200" height="35" rx="8" fill="#0f172a" />
+    <path d="M 0,35 L 200,35" stroke="#ec4899" stroke-width="1.5"/>
+    <text x="10" y="22" fill="#f472b6" font-family="Segoe UI, sans-serif" font-size="12" font-weight="bold">🛒 CARTS</text>
+
+    <text x="15" y="55" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11" font-weight="bold">id</text>
+    <text x="80" y="55" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [PK]</text>
+
+    <text x="15" y="75" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">user_id</text>
+    <text x="80" y="75" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [FK]</text>
+
+    <text x="15" y="95" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">product_id</text>
+    <text x="80" y="95" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [FK]</text>
+
+    <text x="15" y="115" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">quantity</text>
+    <text x="80" y="115" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT</text>
+  </g>
+
+  <!-- 5. ORDERS Table -->
+  <g filter="url(#shadow)" transform="translate(30, 280)">
+    <rect width="200" height="140" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+    <rect width="200" height="35" rx="8" fill="#0f172a" />
+    <path d="M 0,35 L 200,35" stroke="#10b981" stroke-width="1.5"/>
+    <text x="10" y="22" fill="#34d399" font-family="Segoe UI, sans-serif" font-size="12" font-weight="bold">🧾 ORDERS</text>
+
+    <text x="15" y="55" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11" font-weight="bold">id</text>
+    <text x="80" y="55" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [PK]</text>
+
+    <text x="15" y="75" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">user_id</text>
+    <text x="80" y="75" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">INT [FK]</text>
+
+    <text x="15" y="95" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">total</text>
+    <text x="80" y="95" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">FLOAT</text>
+
+    <text x="15" y="115" fill="#fff" font-family="Segoe UI, sans-serif" font-size="11">status</text>
+    <text x="80" y="115" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="11">VARCHAR</text>
+  </g>
+</svg>
