@@ -19,33 +19,9 @@ This document describes the design philosophy, architectural layout, database sc
 
 ## 2. Architecture & Data Flow
 
-```mermaid
-graph TD
-    subgraph Frontend [React Frontend (Vite)]
-        UI[Glassmorphism UI Components]
-        State[React State - Cart/Products/Orders]
-        Auth[JWT Storage - LocalStorage]
-        DemoFallback[Demo Mode / Mock Data Engine]
-    end
-
-    subgraph Backend [FastAPI Backend]
-        API[FastAPI Router / Endpoints]
-        Security[JWT Auth / bcrypt Hashing]
-        DB_Dep[get_db Session Factory]
-    end
-
-    subgraph Database [Relational Database]
-        SQL[SQLAlchemy ORM Models]
-        PG[(PostgreSQL Database)]
-    end
-
-    UI -->|HTTP Requests| API
-    UI -->|Offline Fallback| DemoFallback
-    API -->|Authenticate / Verify| Security
-    API -->|Session Dependency| DB_Dep
-    DB_Dep -->|Queries / Mutations| SQL
-    SQL -->|Sync / Asyncpg| PG
-```
+<p align="center">
+  <img src="architecture.svg" alt="Architecture Flow" />
+</p>
 
 ### Request-Response Life Cycle
 1. **Client Action**: The client triggers a request (e.g., adding an item to the cart or publishing a listing).
@@ -61,45 +37,9 @@ graph TD
 
 The entity relationship model is composed of five core tables:
 
-```mermaid
-erDiagram
-    USER {
-        int id PK
-        string username UNIQUE
-        string password
-        string role "buyer | seller"
-    }
-    PRODUCT {
-        int id PK
-        string name
-        float price
-        int stock
-        int seller_id FK
-    }
-    CART {
-        int id PK
-        int user_id FK
-        int product_id FK
-        int quantity
-    }
-    ORDER {
-        int id PK
-        int user_id FK
-        float total
-        string status "completed | pending"
-    }
-    PROMO {
-        int id PK
-        string code UNIQUE
-        float discount
-        boolean active
-    }
-
-    USER ||--o{ PRODUCT : "owns (as seller)"
-    USER ||--o{ CART : "owns"
-    USER ||--o{ ORDER : "places"
-    PRODUCT ||--o{ CART : "is in"
-```
+<p align="center">
+  <img src="schema.svg" alt="Database Schema" />
+</p>
 
 ### Table Details
 * **Users** ([user_models.py](file:///d:/Ecommerce%20fullstack%20app/ShopSphere/backend/app/models/User/user_models.py)): Stores auth credentials (username, role, hashed passwords).
