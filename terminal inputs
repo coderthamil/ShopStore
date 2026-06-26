@@ -1,0 +1,55 @@
+# ShopSphere Terminal Inputs & Execution Guide
+
+# --- OPEN TERMINAL IN VS CODE ---
+# Press CTRL + ` to open the terminal
+
+# ==========================================
+# 1. DATABASE SETUP (PostgreSQL)
+# ==========================================
+# Connect to PostgreSQL instance (via psql shell or pgAdmin)
+# Run the following SQL to create the database:
+# CREATE DATABASE shopsphere;
+
+# ==========================================
+# 2. BACKEND SETUP & RUN
+# ==========================================
+# Navigate into the ShopSphere directory
+cd "d:\Ecommerce fullstack app\ShopSphere"
+
+# Navigate into the backend directory
+cd backend
+
+# Initialize backend Python project (using uv package manager)
+uv init
+
+# Install core backend dependencies (FastAPI, Uvicorn, SQLAlchemy, drivers)
+uv add fastapi uvicorn sqlalchemy psycopg2-binary asyncpg pydantic
+
+# Install auth, env loading, and migration dependencies
+uv add python-decouple python-jose[cryptography] passlib bcrypt alembic
+
+# (Optional: If starting migrations from scratch)
+# uv run alembic init migrations
+
+# Apply Alembic database migrations to create schemas
+uv run alembic upgrade head
+
+# Seed the database with initial users (buyer, seller), products, and promos
+uv run python seed.py
+
+# Launch the FastAPI dev server (reloads on changes)
+uv run uvicorn main:app --reload
+
+# ==========================================
+# 3. FRONTEND SETUP & RUN
+# ==========================================
+# Open a new terminal tab or panel in VS Code
+
+# Navigate to the frontend directory
+cd "d:\Ecommerce fullstack app\ShopSphere\frontend"
+
+# Install React/Vite dependencies
+npm install
+
+# Run the frontend dev server
+npm run dev

@@ -1,0 +1,11 @@
+```
+└── 📁ShopSphere
+    └── 📁backend
+        └── 📁app
+            └── 📁core
+            └── 📁database
+            └── 📁models
+            └── 📁routes
+            └── 📁schemas
+    └── frontend
+```
